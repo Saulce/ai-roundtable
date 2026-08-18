@@ -1,0 +1,22 @@
+# local config
+.claude/
+
+# local scratch (wayfinder tracker lives on GitHub Issues, not here)
+.scratch/
+
+# personal notes
+注意！.txt
+
+# secrets
+.env
+.env.*
+!.env.example
+
+# deps / build (stack TBD)
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+dist/
+build/
