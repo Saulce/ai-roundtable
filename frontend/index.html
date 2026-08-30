@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<!--
+  AI 圆桌讨论 · 两视图 SPA
+  决议来源：Wayfinder Map #1 决策票 #8（Web 前端与流式交互）；spec：Task 9（issue #17）。
+  传输：EventSource 消费 SSE（opening/token/message/paused/terminated/error）+ fetch REST（stop/continue）。
+  无构建步骤：原生 HTML/CSS/JS，由 FastAPI 静态挂载到 /。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 圆桌讨论</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <!-- ===== 发起页 ===== -->
+  <section id="setup-view" class="setup-page">
+    <div class="setup">
+      <h1>发起一场圆桌讨论</h1>
+      <p class="sub">输入话题，选定立场各异的 AI 角色，开始自由发言。</p>
+
+      <label for="topicInput">话题</label>
+      <textarea id="topicInput" rows="3" placeholder="例如：是否应该全面推行四天工作制？"></textarea>
+
+      <label>选角色（默认勾选前三，可调 2–6）</label>
+      <div id="roleChips" class="roles"></div>
+      <div class="count" id="roleCount">已选 0 个角色</div>
+
+      <label>轮次设置（每段轮数上限；勾选「仅手动停止」则达上限不暂停）</label>
+      <div class="turns">
+        <input type="number" id="maxTurns" min="1" max="99" value="15">
+        <label class="manual"><input type="checkbox" id="manualStop"> 仅手动停止</label>
+      </div>
+
+      <button id="goBtn" class="go" disabled>发起讨论 →</button>
+      <div id="setupError" class="error" hidden></div>
+    </div>
+  </section>
+
+  <!-- ===== 讨论页：三栏 ===== -->
+  <section id="discuss-view" hidden>
+    <div class="discuss">
+      <div class="topbar">
+        <button id="backBtn" class="back">← 重新发起</button>
+        <div class="title" id="discussTitle">AI 圆桌</div>
+        <div class="rounds" id="roundsInfo"></div>
+      </div>
+
+      <div class="col"><h2>话题 · 角色</h2><div class="body">
+        <div class="topic" id="discussTopic"></div>
+        <div id="roleList"></div>
+        <p class="muted note">角色全透明，共享同一上下文（#3）</p>
+      </div></div>
+
+      <div class="col"><h2>时间线聊天流</h2><div class="body" id="timeline"></div></div>
+
+      <div class="col"><h2>立场漂移 · 摘要</h2><div class="body">
+        <div id="driftList"></div>
+        <div id="summaryBox"></div>
+      </div></div>
+    </div>
+
+    <button id="stopBtn" class="stop" title="手动停止 → 触发全场总结">■ 叫停</button>
+
+    <div id="continueBar" class="continue-bar" hidden>
+      <span id="continueHint"></span>
+      <button id="continueBtn" class="go" style="width:auto;margin:0;padding:10px 20px">继续讨论</button>
+    </div>
+  </section>
+
+  <!-- ===== 全场总结 overlay ===== -->
+  <div id="summaryOverlay" class="summary-overlay">
+    <div class="summary" id="summaryContent"></div>
+  </div>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
