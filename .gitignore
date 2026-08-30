@@ -21,3 +21,6 @@ __pycache__/
 venv/
 dist/
 build/
+
+# runtime data
+roundtable.db

@@ -136,6 +136,8 @@ class SessionManager:
         opening, transcript = self._split_messages(disc)
         turn_count = len(transcript)
         n = self._per_segment.get(discussion_id, disc["max_turns"])
+        # 图内 max_turns = 本段累计预算 = turn_count + N；N<=0 表示仅手动停止（图内永不按轮次暂停）
+        budget = 0 if n <= 0 else turn_count + n
         return {
             "topic": disc["topic"],
             "personas": disc["personas"],
@@ -144,7 +146,7 @@ class SessionManager:
             "next_speaker": "",
             "stalled": False,
             "turn_count": turn_count,
-            "max_turns": turn_count + n,
+            "max_turns": budget,
             "segment_start": turn_count,
             "status": "running",
             "mode": "",
