@@ -1,4 +1,11 @@
 import os
+from pathlib import Path
+
+from dotenv import load_dotenv
+
+# 加载项目根目录的 .env（README 快速开始中 cp .env.example .env 的产物）。
+# 默认 override=False：已导出的环境变量优先于 .env，避免覆盖 shell 里的显式配置。
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 
 class Config:
