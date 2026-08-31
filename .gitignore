@@ -1,5 +1,6 @@
 # local config
 .claude/
+.playwright-mcp/
 
 # local scratch (wayfinder tracker lives on GitHub Issues, not here)
 .scratch/
